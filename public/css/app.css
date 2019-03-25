@@ -10660,3 +10660,42 @@ a.text-dark:focus {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
+.counter {
+  margin-right: 30px;
+  font-size: 10px;
+  text-align: center;
+}
+
+.counter strong {
+  display: block;
+  font-size: 2em;
+}
+
+.counter .vote,
+.counter .answer {
+  width: 60px;
+  height: 60px;
+}
+
+.counter .status.unanswered {
+  border: none;
+}
+
+.counter .status.answered {
+  border: 1px solid #5fbb7e;
+  color: #5fbb7e;
+}
+
+.counter .status.answered-accepted {
+  background: #5fbb7e;
+  color: ffff;
+}
+
+.counter .view {
+  margin-top: 10px;
+}
+
+form.form-delete {
+  display: inline;
+}
+

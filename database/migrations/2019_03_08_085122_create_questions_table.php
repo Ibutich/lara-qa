@@ -14,7 +14,7 @@ class CreateQuestionsTable extends Migration
     public function up()
     {
         Schema::create('questions', function (Blueprint $table) {
-            $table->bigIncrements('id')->unsigned();
+            $table->bigIncrements('id')->unsigned(); //Add unsigned() method incase of an error
             $table->string('title');
             $table->string('slug')->unique();
             $table->text('body');
