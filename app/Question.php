@@ -24,7 +24,7 @@ class Question extends Model
 //Accessors that show the creator of the question for question->user->url attribute in index.blade
     public function getUrlAttribute()
     {
-    	return route("questions.show",$this->id); //return the quiz url and since we are in the question model we use $this
+    	return route("questions.show",$this->slug); //return the quiz url and since we are in the question model we use $this
     }
 //Accessor that shows the time the question was created for created_at attribute in index.blade
     public function getCreatedDateAttribute()
@@ -41,6 +41,11 @@ class Question extends Model
             return "answered";
         }
         return "unanswered";
+    }
+
+    public function getBodyHtmlAttribute()
+    {
+        return \Parsedown::instance()->text($this->body);
     }
 }
  

@@ -8,6 +8,13 @@ use App\Http\Requests\AskQuestionRequest;
 
 class QuestionsController extends Controller
 {
+         //Define a constructor so as to protect our create page from pple who are not logged in but they can have access to the index and details/show pages only.
+
+    public function _construct()
+    {
+       /* call auth middleware */
+          $this->middleware('auth', ['expect' => ['index', 'show']]); 
+    }
     /**
      * Display a listing of the resource.
      *
@@ -45,7 +52,8 @@ class QuestionsController extends Controller
     public function store(AskQuestionRequest $request)
     {
         $request->user()->questions()->create($request->only('title', 'body'));
-        return redirect()->route('questions.index')->with('success', "Your question has been submitted");
+        return redirect()->route('questions.index') 
+       ->with('success', "Your question has been submitted");
     }
 
     /**
@@ -56,6 +64,8 @@ class QuestionsController extends Controller
      */
     public function show(Question $question)
     {
+        $question->increment('views');
+        return view('questions.show', compact('question'));
 
     }
 
@@ -67,7 +77,12 @@ class QuestionsController extends Controller
      */
     public function edit(Question $question)
     {
-        return view("questions.edit", compact('question'));
+        // if (\Gate::denies('update-question',$question)) {
+
+        //    abort(403,"Access Denied");
+        // }
+        $this->authorize("update", $question);
+        return view("questions.edit", compact('question')); 
     }
 
     /**
@@ -79,6 +94,13 @@ class QuestionsController extends Controller
      */
     public function update(AskQuestionRequest $request, Question $question)
     {
+        // if (\Gate::denies('update-question',$question)) {
+
+        //    abort(403,"Access Denied");
+        // }
+
+        $this->authorize("update", $question);
+
         $question->update($request->only('title', 'body'));
         return redirect('/questions')->with('success', "Your question has been successfully updated");
     }
@@ -91,7 +113,15 @@ class QuestionsController extends Controller
      */
     public function destroy(Question $question)
     {
+
+        // if (\Gate::denies('delete-question',$question)) {
+
+        //    abort(403,"Access Denied");
+        // }
+        $this->authorize("delete", $question);
+
         $question->delete();
-        return redirect('/questions')->with('success', "Your question has been deleted");
+        return redirect('/questions') 
+        ->with('success', "Your question has been deleted");
     }
 }
